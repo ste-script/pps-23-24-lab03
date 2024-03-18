@@ -56,14 +56,11 @@ object Sequences: // Essentially, generic linkedlists
         case _                 => Empty()
 
     def coursesOfTeachers(teachers: Sequence[Person]): Sequence[String] =
-      teachers match
-        case Cons(Teacher(name, course), tail) =>
-          flatMap(teachers)(v =>
-            v match
-              case Teacher(n, c) => Cons(c, Nil())
-              case _             => Nil()
-          )
-        case _ => Nil()
+      flatMap(teachers)(v =>
+        v match
+          case Teacher(n, c) => Cons(c, Nil())
+          case _             => Nil()
+      )
 
 @main def trySequences =
   import Sequences.*
