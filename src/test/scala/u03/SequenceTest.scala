@@ -45,6 +45,7 @@ class SequenceTest:
       concat(l, l2)
     )
     assertEquals(Cons(40, Cons(50, Nil())), concat(Nil(), l2))
+    
   @Test def testFlatMap() =
     assertEquals(
       Cons(11, Cons(21, Cons(31, Nil()))),
