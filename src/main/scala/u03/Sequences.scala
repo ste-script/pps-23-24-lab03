@@ -4,7 +4,7 @@ import u02.AnonymousFunctions.l
 import u03.Optionals.Optional
 
 object Sequences: // Essentially, generic linkedlists
-  
+
   enum Sequence[E]:
     case Cons(head: E, tail: Sequence[E])
     case Nil()
@@ -25,18 +25,24 @@ object Sequences: // Essentially, generic linkedlists
       case Nil()                 => Nil()
 
     // Lab 03
-    def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] = ???
+    def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
+      ???
 
-    def take[A](l: Sequence[A])(n: Int): Sequence[A] = ???
-    
+    def take[A](l: Sequence[A])(n: Int): Sequence[A] = (l, n) match
+      case (Cons(h, t), n) if n == 0 => Nil()
+      case (Cons(h, t), n) => Cons(h, take(t)(n - 1))
+      case (Nil(), n)      => Nil()
+
     def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] = ???
-    def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] = ???
+    def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
+      ???
 
     def min(l: Sequence[Int]): Optional[Int] = ???
-    
+
 @main def trySequences =
-  import Sequences.* 
-  val l = Sequence.Cons(10, Sequence.Cons(20, Sequence.Cons(30, Sequence.Nil())))
+  import Sequences.*
+  val l =
+    Sequence.Cons(10, Sequence.Cons(20, Sequence.Cons(30, Sequence.Nil())))
   println(Sequence.sum(l)) // 30
 
   import Sequence.*
