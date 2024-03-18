@@ -26,12 +26,14 @@ object Sequences: // Essentially, generic linkedlists
 
     // Lab 03
     def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
-      ???
+      (first, second) match
+        case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1, h2), zip(t1, t2))
+        case _                            => Nil()
 
     def take[A](l: Sequence[A])(n: Int): Sequence[A] = (l, n) match
       case (Cons(h, t), n) if n == 0 => Nil()
-      case (Cons(h, t), n) => Cons(h, take(t)(n - 1))
-      case (Nil(), n)      => Nil()
+      case (Cons(h, t), n)           => Cons(h, take(t)(n - 1))
+      case (Nil(), n)                => Nil()
 
     def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] = ???
     def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
