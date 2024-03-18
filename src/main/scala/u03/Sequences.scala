@@ -2,6 +2,8 @@ package u03
 
 import u02.AnonymousFunctions.l
 import u03.Optionals.Optional
+import u02.Modules.*
+import u02.Modules.Person.*
 
 object Sequences: // Essentially, generic linkedlists
 
@@ -52,6 +54,16 @@ object Sequences: // Essentially, generic linkedlists
         case Cons(head, Nil()) => Just(head)
         case Cons(head, tail)  => min(filter(l)(_ <= head))
         case _                 => Empty()
+
+    def coursesOfTeachers(teachers: Sequence[Person]): Sequence[String] =
+      teachers match
+        case Cons(Teacher(name, course), tail) =>
+          flatMap(teachers)(v =>
+            v match
+              case Teacher(n, c) => Cons(c, Nil())
+              case _             => Nil()
+          )
+        case _ => Nil()
 
 @main def trySequences =
   import Sequences.*

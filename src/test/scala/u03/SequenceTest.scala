@@ -3,6 +3,7 @@ package u03
 import Optionals.Optional.*
 import org.junit.*
 import org.junit.Assert.*
+import u02.Modules.Person.*
 
 class SequenceTest:
   import u03.Sequences.*
@@ -35,7 +36,7 @@ class SequenceTest:
       zip(l, l2)
     )
     assertEquals(Nil(), zip(l, Nil()))
-    assertEquals(Nil(), zip(Nil(), l2)) 
+    assertEquals(Nil(), zip(Nil(), l2))
     assertEquals(Nil(), zip(Nil(), Nil()))
 
   @Test def testConcat() =
@@ -57,3 +58,11 @@ class SequenceTest:
     assertEquals(Just(10), min(l))
     assertEquals(Just(1), min(Cons(1, Nil())))
     assertEquals(Empty(), min(Nil()))
+
+  @Test def testCourseOfTeachers =
+    val teachers = Cons(
+      Teacher("mirko", "pps"),
+      Cons(Teacher("carb", "programmazione"), Nil())
+    )
+    val expected = Cons("pps", Cons("programmazione", Nil()))
+    assertEquals(expected, coursesOfTeachers(teachers))
