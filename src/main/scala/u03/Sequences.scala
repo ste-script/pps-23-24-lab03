@@ -4,6 +4,8 @@ import u02.AnonymousFunctions.l
 import u03.Optionals.Optional
 import u02.Modules.*
 import u02.Modules.Person.*
+import u02.Tuples.t
+import scala.annotation.tailrec
 
 object Sequences: // Essentially, generic linkedlists
 
@@ -61,6 +63,26 @@ object Sequences: // Essentially, generic linkedlists
           case Teacher(n, c) => Cons(c, Nil())
           case _             => Nil()
       )
+
+    def mapWithFlatMap[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] =
+      flatMap(l)(v => Cons(mapper(v), Nil()))
+
+    def filterWithFlatMap[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] =
+      flatMap(l1)(v =>
+        v match
+          case v if pred(v) => Cons(v, Nil())
+          case _            => Nil()
+      )
+
+    def minWithoutFilter(l: Sequence[Int]): Optional[Int] =
+      import Optional.*
+      def _min(l: Sequence[Int], min: Int): Int = l match
+        case Cons(h, t) if h < min => _min(t, h)
+        case Cons(_, t)            => _min(t, min)
+        case _                     => min
+      l match
+        case Cons(h, t) => Just(_min(t, h))
+        case _          => Empty()
 
 @main def trySequences =
   import Sequences.*
