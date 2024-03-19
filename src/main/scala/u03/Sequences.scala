@@ -84,6 +84,12 @@ object Sequences: // Essentially, generic linkedlists
         case Cons(h, t) => Just(_min(t, h))
         case _          => Empty()
 
+    def foldLeft[A](l: Sequence[A])(starting: A)(
+        mapper: (a: A, b: A) => A
+    ): A = l match
+      case Cons(h, t) => foldLeft(t)(mapper(starting, h))(mapper)
+      case _          => starting
+
 @main def trySequences =
   import Sequences.*
   val l =
