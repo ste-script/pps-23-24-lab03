@@ -29,41 +29,30 @@ object Sequences: // Essentially, generic linkedlists
       case Nil()                 => Nil()
 
     // Lab 03
+    // 1 b
     def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
       (first, second) match
         case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1, h2), zip(t1, t2))
         case _                            => Nil()
-
+    // 1 a
     def take[A](l: Sequence[A])(n: Int): Sequence[A] = (l, n) match
       case (Cons(h, t), n) if n == 0 => Nil()
       case (Cons(h, t), n)           => Cons(h, take(t)(n - 1))
       case (Nil(), n)                => Nil()
-
+    // 1 c
     def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] =
       (l1: Sequence[A], l2: Sequence[A]) match
         case (Cons(h1, t1), l2) => Cons(h1, concat(t1, l2))
         case (Nil(), l2)        => l2
         case _                  => Nil()
 
+    // 1 c
     def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
       l match
         case Cons(h, t) => concat(mapper(h), flatMap(t)(mapper))
         case _          => Nil()
 
-    def min(l: Sequence[Int]): Optional[Int] =
-      import Optional.*
-      l match
-        case Cons(head, Nil()) => Just(head)
-        case Cons(head, tail)  => min(filter(l)(_ <= head))
-        case _                 => Empty()
-
-    def coursesOfTeachers(teachers: Sequence[Person]): Sequence[String] =
-      flatMap(teachers)(v =>
-        v match
-          case Teacher(n, c) => Cons(c, Nil())
-          case _             => Nil()
-      )
-
+    // 1 d
     def mapWithFlatMap[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] =
       flatMap(l)(v => Cons(mapper(v), Nil()))
 
@@ -74,6 +63,14 @@ object Sequences: // Essentially, generic linkedlists
           case _            => Nil()
       )
 
+    // 2
+    def min(l: Sequence[Int]): Optional[Int] =
+      import Optional.*
+      l match
+        case Cons(head, Nil()) => Just(head)
+        case Cons(head, tail)  => min(filter(l)(_ <= head))
+        case _                 => Empty()
+    
     def minWithoutFilter(l: Sequence[Int]): Optional[Int] =
       import Optional.*
       def _min(l: Sequence[Int], min: Int): Int = l match
@@ -84,6 +81,16 @@ object Sequences: // Essentially, generic linkedlists
         case Cons(h, t) => Just(_min(t, h))
         case _          => Empty()
 
+
+    //3
+    def coursesOfTeachers(teachers: Sequence[Person]): Sequence[String] =
+      flatMap(teachers)(v =>
+        v match
+          case Teacher(n, c) => Cons(c, Nil())
+          case _             => Nil()
+      )
+
+    //4
     def foldLeft[A](l: Sequence[A])(starting: A)(
         mapper: (a: A, b: A) => A
     ): A = l match
