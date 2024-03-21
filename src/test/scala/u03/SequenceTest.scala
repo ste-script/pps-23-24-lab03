@@ -4,6 +4,7 @@ import Optionals.Optional.*
 import org.junit.*
 import org.junit.Assert.*
 import u02.Modules.Person.*
+import u03.extensionmethods.Sequences
 
 class SequenceTest:
   import u03.Sequences.*
@@ -82,8 +83,18 @@ class SequenceTest:
     assertEquals(Just(10), minWithoutFilter(l))
     assertEquals(Just(1), minWithoutFilter(Cons(1, Nil())))
     assertEquals(Empty(), minWithoutFilter(Nil()))
- 
+
   @Test def testFoldLeft() =
     val lst = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
     val folded = foldLeft(lst)(0)(_ - _)
     assertEquals(-16, folded)
+
+  @Test def testStreamTakeWhile =
+    import u03.extensionmethods.Streams.*
+    import u03.extensionmethods.Sequences.*
+    import u03.extensionmethods.Sequences.Sequence.*
+    val s = Stream.iterate(0)(_ + 1)
+    val taken = Stream.toList(Stream2.takeWhile(s)(_ < 5))
+    val expected: Sequence[Int] =
+      Cons(0, Cons(1, Cons(2, Cons(3, Cons(4, Nil())))))
+    assertEquals(expected, taken)

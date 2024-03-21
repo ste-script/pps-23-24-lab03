@@ -162,6 +162,13 @@ object Sequences: // Essentially, generic linkedlists
           case Cons(h, t) => Just(_min(t, h))
           case _          => Empty()
 
+object Stream2:
+  import u03.extensionmethods.Streams.*
+  extension [A](s: Stream[A])
+    def takeWhile(pred: A => Boolean): Stream[A] = s match
+      case Stream.Cons(head, tail) if pred(head()) =>
+        Stream.cons(head(), tail().takeWhile(pred))
+      case _ => Stream.empty()
 @main def trySequences =
   import Sequences.*
   val l =
