@@ -106,3 +106,16 @@ class SequenceTest:
     val taken = Stream.toList(Stream2.fill(3)("a"))
     val expected = Cons("a", Cons("a", Cons("a", Nil())))
     assertEquals(expected, taken)
+  // 7
+  @Test def testStreamPell =
+    import u03.extensionmethods.Streams.*
+    import u03.extensionmethods.Sequences.*
+    import u03.extensionmethods.Sequences.Sequence.*
+    def pelld(n: Int): Int = n match
+      case 0 => 0
+      case 1 => 1
+      case _ => 2 * pelld(n - 1) + pelld(n - 2)
+    val pell = Stream.iterate(0)(_ + 1).map(pelld)
+    val taken = Stream.toList(Stream.take(pell)(5))
+    val expected = Cons(0, Cons(1, Cons(2, Cons(5, Cons(12, Nil())))))
+    assertEquals(expected, taken)
