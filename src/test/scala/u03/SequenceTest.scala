@@ -33,19 +33,19 @@ class SequenceTest:
     val l2: Sequence[String] = Cons("10", Cons("20", Cons("30", Nil())))
     assertEquals(
       Cons((10, "10"), Cons((20, "20"), Cons((30, "30"), Nil()))),
-      zip(l, l2)
+      zip(l)(l2)
     )
-    assertEquals(Nil(), zip(l, Nil()))
-    assertEquals(Nil(), zip(Nil(), l2))
-    assertEquals(Nil(), zip(Nil(), Nil()))
+    assertEquals(Nil(), zip(l)(Nil()))
+    assertEquals(Nil(), zip(Nil())(l2))
+    assertEquals(Nil(), zip(Nil())(Nil()))
 
   @Test def testConcat() =
     val l2: Sequence[Int] = Cons(40, Cons(50, Nil()))
     assertEquals(
       Cons(10, Cons(20, Cons(30, Cons(40, Cons(50, Nil()))))),
-      concat(l, l2)
+      concat(l)(l2)
     )
-    assertEquals(Cons(40, Cons(50, Nil())), concat(Nil(), l2))
+    assertEquals(Cons(40, Cons(50, Nil())), concat(Nil())(l2))
 
   @Test def testFlatMap() =
     assertEquals(
@@ -73,7 +73,7 @@ class SequenceTest:
       Cons("10", Cons("20", Cons("30", Nil()))),
       mapWithFlatMap(l)(_ + "")
     )
- 
+
   @Test def testFilterWithFlatMap() =
     assertEquals(Cons(20, Cons(30, Nil())), filterWithFlatMap(l)(_ >= 20))
     assertEquals(Cons(10, Cons(30, Nil())), filterWithFlatMap(l)(_ != 20))
@@ -81,9 +81,9 @@ class SequenceTest:
   @Test def testMinWithoutFilter() =
     assertEquals(Just(10), minWithoutFilter(l))
     assertEquals(Just(1), minWithoutFilter(Cons(1, Nil())))
-    assertEquals(Empty(), minWithoutFilter(Nil())) 
-
+    assertEquals(Empty(), minWithoutFilter(Nil()))
+ 
   @Test def testFoldLeft() =
-    val lst = Cons (3 , Cons (7 , Cons (1 , Cons (5 , Nil () ) ) ) )
-    val folded = foldLeft ( lst ) (0) ( _ - _ ) 
-      assertEquals(-16,folded) 
+    val lst = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
+    val folded = foldLeft(lst)(0)(_ - _)
+    assertEquals(-16, folded)
