@@ -15,23 +15,23 @@ object Sequences: // Essentially, generic linkedlists
 
   object Sequence:
 
-    def sum(l: Sequence[Int]): Int = l match
+    def sum(s: Sequence[Int]): Int = s match
       case Cons(h, t) => h + sum(t)
       case _          => 0
 
-    def map[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] = l match
+    def map[A, B](s: Sequence[A])(mapper: A => B): Sequence[B] = s match
       case Cons(h, t) => Cons(mapper(h), map(t)(mapper))
       case Nil()      => Nil()
 
-    def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] = l1 match
+    def filter[A](s: Sequence[A])(pred: A => Boolean): Sequence[A] = s match
       case Cons(h, t) if pred(h) => Cons(h, filter(t)(pred))
       case Cons(_, t)            => filter(t)(pred)
       case Nil()                 => Nil()
 
     // Lab 03
     // 1 b
-    def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
-      (first, second) match
+    def zip[A, B](s: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
+      (s, second) match
         case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1, h2), zip(t1, t2))
         case _                            => Nil()
     // 1 a
@@ -40,60 +40,59 @@ object Sequences: // Essentially, generic linkedlists
       case (Cons(h, t), n)           => Cons(h, take(t)(n - 1))
       case (Nil(), n)                => Nil()
     // 1 c
-    def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] =
-      (l1: Sequence[A], l2: Sequence[A]) match
+    def concat[A](s: Sequence[A], s2: Sequence[A]): Sequence[A] =
+      (s: Sequence[A], s2: Sequence[A]) match
         case (Cons(h1, t1), l2) => Cons(h1, concat(t1, l2))
         case (Nil(), l2)        => l2
         case _                  => Nil()
 
     // 1 c
-    def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
-      l match
+    def flatMap[A, B](s: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
+      s match
         case Cons(h, t) => concat(mapper(h), flatMap(t)(mapper))
         case _          => Nil()
 
     // 1 d
-    def mapWithFlatMap[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] =
-      flatMap(l)(v => Cons(mapper(v), Nil()))
+    def mapWithFlatMap[A, B](s: Sequence[A])(mapper: A => B): Sequence[B] =
+      flatMap(s)(v => Cons(mapper(v), Nil()))
 
-    def filterWithFlatMap[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] =
-      flatMap(l1)(v =>
+    def filterWithFlatMap[A](s: Sequence[A])(pred: A => Boolean): Sequence[A] =
+      flatMap(s)(v =>
         v match
           case v if pred(v) => Cons(v, Nil())
           case _            => Nil()
       )
 
     // 2
-    def min(l: Sequence[Int]): Optional[Int] =
+    def min(s: Sequence[Int]): Optional[Int] =
       import Optional.*
-      l match
+      s match
         case Cons(head, Nil()) => Just(head)
-        case Cons(head, tail)  => min(filter(l)(_ <= head))
+        case Cons(head, tail)  => min(filter(s)(_ <= head))
         case _                 => Empty()
-    
-    def minWithoutFilter(l: Sequence[Int]): Optional[Int] =
+
+    def minWithoutFilter(s: Sequence[Int]): Optional[Int] =
       import Optional.*
       def _min(l: Sequence[Int], min: Int): Int = l match
         case Cons(h, t) if h < min => _min(t, h)
         case Cons(_, t)            => _min(t, min)
         case _                     => min
-      l match
+      s match
         case Cons(h, t) => Just(_min(t, h))
         case _          => Empty()
 
-
-    //3
-    def coursesOfTeachers(teachers: Sequence[Person]): Sequence[String] =
-      flatMap(teachers)(v =>
+    // 3
+    def coursesOfTeachers(s: Sequence[Person]): Sequence[String] =
+      flatMap(s)(v =>
         v match
           case Teacher(n, c) => Cons(c, Nil())
           case _             => Nil()
       )
 
-    //4
-    def foldLeft[A](l: Sequence[A])(starting: A)(
+    // 4
+    def foldLeft[A](s: Sequence[A])(starting: A)(
         mapper: (a: A, b: A) => A
-    ): A = l match
+    ): A = s match
       case Cons(h, t) => foldLeft(t)(mapper(starting, h))(mapper)
       case _          => starting
 
