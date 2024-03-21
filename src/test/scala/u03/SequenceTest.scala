@@ -89,12 +89,20 @@ class SequenceTest:
     val folded = foldLeft(lst)(0)(_ - _)
     assertEquals(-16, folded)
 
+  // 6
   @Test def testStreamTakeWhile =
     import u03.extensionmethods.Streams.*
     import u03.extensionmethods.Sequences.*
     import u03.extensionmethods.Sequences.Sequence.*
     val s = Stream.iterate(0)(_ + 1)
     val taken = Stream.toList(Stream2.takeWhile(s)(_ < 5))
-    val expected: Sequence[Int] =
-      Cons(0, Cons(1, Cons(2, Cons(3, Cons(4, Nil())))))
+    val expected = Cons(0, Cons(1, Cons(2, Cons(3, Cons(4, Nil())))))
+    assertEquals(expected, taken)
+  // 7
+  @Test def testStreamFill =
+    import u03.extensionmethods.Streams.*
+    import u03.extensionmethods.Sequences.*
+    import u03.extensionmethods.Sequences.Sequence.*
+    val taken = Stream.toList(Stream2.fill(3)("a"))
+    val expected = Cons("a", Cons("a", Cons("a", Nil())))
     assertEquals(expected, taken)

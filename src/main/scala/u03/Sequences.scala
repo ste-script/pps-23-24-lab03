@@ -164,11 +164,19 @@ object Sequences: // Essentially, generic linkedlists
 
 object Stream2:
   import u03.extensionmethods.Streams.*
+
+  // 6
   extension [A](s: Stream[A])
     def takeWhile(pred: A => Boolean): Stream[A] = s match
       case Stream.Cons(head, tail) if pred(head()) =>
         Stream.cons(head(), tail().takeWhile(pred))
       case _ => Stream.empty()
+
+  // 7
+  def fill[A](n: Int)(elem: => A): Stream[A] = n match
+    case 0 => Stream.empty()
+    case _ => Stream.cons(elem, fill(n - 1)(elem))
+
 @main def trySequences =
   import Sequences.*
   val l =
